@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Hỗ Trợ Tóm Tắt Tài Liệu Học Tập</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e1b4b);
+color:white;
+min-height:100vh;
+}
+
+header{
+padding:20px 10%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#60a5fa;
+}
+
+nav a{
+text-decoration:none;
+color:white;
+margin-left:20px;
+transition:0.3s;
+}
+
+nav a:hover{
+color:#60a5fa;
+}
+
+.hero{
+text-align:center;
+padding:80px 20px;
+}
+
+.hero h1{
+font-size:50px;
+margin-bottom:20px;
+}
+
+.hero p{
+max-width:800px;
+margin:auto;
+opacity:0.9;
+}
+
+.container{
+width:90%;
+max-width:1200px;
+margin:auto;
+}
+
+.section{
+margin:40px 0;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+padding:25px;
+border-radius:20px;
+backdrop-filter:blur(12px);
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+textarea{
+width:100%;
+height:250px;
+padding:15px;
+border:none;
+border-radius:15px;
+resize:none;
+font-size:16px;
+margin-top:15px;
+}
+
+button{
+padding:14px 25px;
+border:none;
+border-radius:12px;
+background:#3b82f6;
+color:white;
+font-size:16px;
+cursor:pointer;
+margin-top:15px;
+transition:0.3s;
+}
+
+button:hover{
+background:#2563eb;
+transform:translateY(-3px);
+}
+
+.result{
+margin-top:20px;
+padding:20px;
+background:white;
+color:black;
+border-radius:15px;
+}
+
+.compare{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.box{
+background:white;
+color:black;
+padding:20px;
+border-radius:15px;
+min-height:200px;
+}
+
+.chatbox{
+height:350px;
+overflow-y:auto;
+background:white;
+color:black;
+padding:15px;
+border-radius:15px;
+margin-bottom:10px;
+}
+
+.chat-input{
+display:flex;
+gap:10px;
+}
+
+.chat-input input{
+flex:1;
+padding:12px;
+border:none;
+border-radius:10px;
+}
+
+footer{
+text-align:center;
+padding:30px;
+margin-top:50px;
+background:rgba(255,255,255,0.05);
+}
+
+@media(max-width:768px){
+.compare{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:32px;
+}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">AI Study Summarizer</div>
+<nav>
+<a href="#">Trang chủ</a>
+<a href="#">Tóm tắt AI</a>
+<a href="#">Chatbot</a>
+<a href="#">Liên hệ</a>
+</nav>
+</header>
+
+<section class="hero">
+<h1>AI Hỗ Trợ Tóm Tắt Tài Liệu Học Tập</h1>
+<p>
+Nhập nội dung tài liệu học tập, AI sẽ tự động phân tích,
+lọc ý chính và tạo bản tóm tắt giúp học sinh - sinh viên
+tiết kiệm thời gian học tập.
+</p>
+</section>
+
+<div class="container">
+
+<section class="section">
+<div class="card">
+<h2>📄 Nhập tài liệu học tập</h2>
+
+<textarea id="inputText"
+placeholder="Dán nội dung bài học, tài liệu hoặc giáo trình vào đây..."></textarea>
+
+<button onclick="summarizeText()">
+Tóm Tắt Bằng AI
+</button>
+
+<div class="result" id="summaryResult">
+Kết quả tóm tắt sẽ xuất hiện ở đây...
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<h2>🔍 Đối Chiếu Trước - Sau</h2>
+
+<div class="compare">
+
+<div class="box">
+<h3>Nội dung gốc</h3>
+<p id="originalContent"></p>
+</div>
+
+<div class="box">
+<h3>Bản tóm tắt</h3>
+<p id="summaryContent"></p>
+</div>
+
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<h2>🤖 Chatbot AI Hỗ Trợ Học Tập</h2>
+
+<div class="chatbox" id="chatbox">
+<div><b>AI:</b> Xin chào! Tôi có thể giải thích nội dung bài học cho bạn.</div>
+</div>
+
+<div class="chat-input">
+<input type="text"
+id="userInput"
+placeholder="Nhập câu hỏi của bạn...">
+
+<button onclick="sendMessage()">Gửi</button>
+</div>
+
+</div>
+</section>
+
+<section class="section">
+<div class="card">
+<h2>🚀 Tích Hợp AI API</h2>
+
+<p>
+Có thể kết nối:
+</p>
+
+<ul>
+<li>OpenAI API (GPT)</li>
+<li>Google Gemini API</li>
+<li>Poe Chatbot</li>
+<li>Coze Chatbot</li>
+<li>Claude API</li>
+</ul>
+
+<br>
+
+<p>
+Vị trí tích hợp API nằm trong hàm
+<code>summarizeText()</code>
+và
+<code>sendMessage()</code>.
+</p>
+
+</div>
+</section>
+
+</div>
+
+<footer>
+© 2026 AI Hỗ Trợ Tóm Tắt Tài Liệu Học Tập
+</footer>
+
+<script>
+
+function summarizeText(){
+
+let text=document.getElementById("inputText").value;
+
+document.getElementById("originalContent").innerText=text;
+
+if(text.length<50){
+alert("Vui lòng nhập nội dung dài hơn.");
+return;
+}
+
+let sentences=text.split(".");
+
+let summary=sentences.slice(0,3).join(".") + ".";
+
+document.getElementById("summaryResult").innerHTML=
+"<b>Tóm tắt AI:</b><br><br>"+summary;
+
+document.getElementById("summaryContent").innerText=summary;
+
+/*
+TÍCH HỢP OPENAI API TẠI ĐÂY
+
+fetch(API_URL,{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+prompt:text
+})
+})
+
+*/
+
+}
+
+function sendMessage(){
+
+let input=document.getElementById("userInput");
+
+let message=input.value.trim();
+
+if(message==="") return;
+
+let chat=document.getElementById("chatbox");
+
+chat.innerHTML+=`
+<div style="margin-top:10px">
+<b>Bạn:</b> ${message}
+</div>
+`;
+
+chat.innerHTML+=`
+<div style="margin-top:10px;color:blue">
+<b>AI:</b> Tôi đang xử lý câu hỏi của bạn...
+</div>
+`;
+
+input.value="";
+
+chat.scrollTop=chat.scrollHeight;
+
+/*
+KẾT NỐI COZE / POE / GPT API TẠI ĐÂY
+*/
+
+}
+
+</script>
+
+</body>
+</html>
